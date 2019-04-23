@@ -483,7 +483,7 @@ print(d.window_size())
 # 横放设备时的可能输出: (1920, 1080)
 ```
 
-Get current app info. For some android devices, the output could be empty (see *Output example 3*)
+获取当前App的信息。对于一些安卓设备来说，输出有可能为空（见例3）
 
 ```python
 print(d.current_app())
@@ -492,34 +492,34 @@ print(d.current_app())
 # Output example 3: {'activity': None, 'package': None}
 ```
 
-Wait activity
+等待Activity
 
 ```python
 d.wait_activity(".ApiDemos", timeout=10) # default timeout 10.0 seconds
 # Output: true of false
 ```
 
-Get device serial number
+获取设备序列号
 
 ```python
 print(d.serial)
 # output example: 74aAEDR428Z9
 ```
 
-Get WLAN ip
+获取网无线网络IP地址
 
 ```python
 print(d.wlan_ip)
 # output example: 10.0.0.1
 ```
 
-Get detailed device info
+获取详细的设备信息
 
 ```python
 print(d.device_info)
 ```
 
-Below is a possible output:
+下面是可能的输出结果：
 
 ```
 {'udid': '3578298f-b4:0b:44:e6:1f:90-OD103',
@@ -549,30 +549,30 @@ Below is a possible output:
  'usingBeganAt': '0001-01-01T00:00:00Z'}
 ```
 
-### Key Events
+### 关键事件（Key Events）
 
-- Turn on/off screen
-
-  ```python
-  d.screen_on() # turn on the screen
-  d.screen_off() # turn off the screen
-  ```
-
-- Get current screen status
+- 开/关屏幕
 
   ```python
-  d.info.get('screenOn') # require Android >= 4.4
+  d.screen_on() # 开屏幕
+  d.screen_off() # 关屏幕
   ```
 
-- Press hard/soft key
+- 获取当前屏幕状态
 
   ```python
-  d.press("home") # press the home key, with key name
-  d.press("back") # press the back key, with key name
-  d.press(0x07, 0x02) # press keycode 0x07('0') with META ALT(0x02)
+  d.info.get('screenOn') # 要求 Android 版本大于 4.4
   ```
 
-- These key names are currently supported:
+- 按键
+
+  ```python
+  d.press("home") # 按下 home 键
+  d.press("back") # 按下 返回键
+  d.press(0x07, 0x02) # 按下代号为 0x07 0x02 的键
+  ```
+
+- 目前支持下列按键名字：
 
   - home
   - back
@@ -592,65 +592,64 @@ Below is a possible output:
   - camera
   - power
 
-You can find all key code definitions at [Android KeyEvnet](https://developer.android.com/reference/android/view/KeyEvent.html)
+您可以在这里找到所有按键的代号： [Android KeyEvnet](https://developer.android.com/reference/android/view/KeyEvent.html)
 
-- Unlock screen
+- 开屏幕锁
 
   ```python
   d.unlock()
-  # This is equivalent to
-  # 1. launch activity: com.github.uiautomator.ACTION_IDENTIFY
-  # 2. press the "home" key
+  # 这相当于
+  # 1. 启动 activity: com.github.uiautomator.ACTION_IDENTIFY
+  # 2. 按下 home 键
   ```
 
-### Gesture interaction with the device
+#### 与设备的手势交互
 
-- Click on the screen
+- 按下屏幕某个位置
 
   ```python
   d.click(x, y)
   ```
 
-- Double click
+- 双击
 
   ```python
   d.double_click(x, y)
   d.double_click(x, y, 0.1) # default duration between two click is 0.1s
   ```
 
-- Long click on the screen
+- 长按
 
   ```python
   d.long_click(x, y)
   d.long_click(x, y, 0.5) # long click 0.5s (default)
   ```
 
-- Swipe
+- 滑动
 
   ```python
   d.swipe(sx, sy, ex, ey)
   d.swipe(sx, sy, ex, ey, 0.5) # swipe for 0.5s(default)
   ```
 
-- Drag
+- 拖拽
 
   ```python
   d.drag(sx, sy, ex, ey)
   d.drag(sx, sy, ex, ey, 0.5) # swipe for 0.5s(default)
   ```
 
-- Swipe points
+- 从某个点滑动到某个点
 
   ```python
-  # swipe from point(x0, y0) to point(x1, y1) then to point(x2, y2)
-  # time will speed 0.2s bwtween two points
+  # 从点(x0, y0) 滑到点 (x1, y1) 再滑到 (x2, y2)
+  # 两点之间的运动时间为0.2秒
   d.swipe((x0, y0), (x1, y1), (x2, y2), 0.2)
   ```
 
-  多用于九宫格解锁，提前获取到每个点的相对坐标（这里支持百分比），
-  更详细的使用参考这个帖子 [使用u2实现九宫图案解锁](https://testerhome.com/topics/11034)
+  多用于九宫格解锁，提前获取到每个点的相对坐标（这里支持百分比），更详细的使用参考这个帖子 [使用u2实现九宫图案解锁](https://testerhome.com/topics/11034)
 
-- Touch and drap (Beta)
+- 触碰并拖动 (Beta)
 
   这个接口属于比较底层的原始接口，感觉并不完善，不过凑合能用。注：这个地方并不支持百分比
 
@@ -661,64 +660,66 @@ You can find all key code definitions at [Android KeyEvnet](https://developer.an
   d.touch.up() # 模拟抬起
   ```
 
-Note: click, swipe, drag operations support percentage position values. Example:
+注意：点击、滑动和拖动操作支持百分比位置值，比如： 
 
-`d.long_click(0.5, 0.5)` means long click center of screen
+```python
+d.long_click(0.5, 0.5) # 长按屏幕中心点
+```
 
-### Screen-related
+#### 有关屏幕
 
-- Retrieve/Set device orientation
+- 获取 / 设置 屏幕方向
 
-  The possible orientations:
+  可能的方向有：
 
   - `natural` or `n`
   - `left` or `l`
   - `right` or `r`
-  - `upsidedown` or `u` (can not be set)
+  - `upsidedown` or `u` (不能设置)
 
   ```python
-  # retrieve orientation. the output could be "natural" or "left" or "right" or "upsidedown"
+  # 获取方向. 可能的输出有："natural" or "left" or "right" or "upsidedown"
   orientation = d.orientation
   
-  # WARNING: not pass testing in my TT-M1
-  # set orientation and freeze rotation.
-  # notes: setting "upsidedown" requires Android>=4.3.
+  # 注意: not pass testing in my TT-M1
+  # 设置方向并冻结旋转.
+  # 注意: 设置 "upsidedown" 要求 Android>=4.3.
   d.set_orientation('l') # or "left"
   d.set_orientation("l") # or "left"
   d.set_orientation("r") # or "right"
   d.set_orientation("n") # or "natural"
   ```
 
-- Freeze/Un-freeze rotation
+- 冻结/解冻 旋转
 
   ```python
-  # freeze rotation
+  # 冻结旋转
   d.freeze_rotation()
-  # un-freeze rotation
+  # 解冻旋转
   d.freeze_rotation(False)
   ```
 
-- Take screenshot
+- 截屏
 
   ```python
-  # take screenshot and save to a file on the computer, require Android>=4.2.
+  # 截屏并保存到电脑上, 要求 Android>=4.2.
   d.screenshot("home.jpg")
   
-  # get PIL.Image formatted images. Naturally, you need pillow installed first
-  image = d.screenshot() # default format="pillow"
-  image.save("home.jpg") # or home.png. Currently, only png and jpg are supported
+  # 获取 PIL.Image 格式的图片. 当然，您需要先安装 Pillow
+  image = d.screenshot() # 默认格式为 "pillow"
+  image.save("home.jpg") # or home.png. 目前只支持png和jpg格式
   
-  # get opencv formatted images. Naturally, you need numpy and cv2 installed first
+  # 获取 opencv 格式的图片. 当然，您需要先安装 numpy 和 opencv 
   import cv2
   image = d.screenshot(format='opencv')
   cv2.imwrite('home.jpg', image)
   
-  # get raw jpeg data
+  # 获取原生的 jpeg 数据
   imagebin = d.screenshot(format='raw')
   open("some.jpg", "wb").write(imagebin)
   ```
 
-- Dump UI hierarchy
+- 导出UI布局
 
   ```python
   # get the UI hierarchy dump content (unicoded).
@@ -732,16 +733,16 @@ Note: click, swipe, drag operations support percentage position values. Example:
   d.open_quick_settings()
   ```
 
-### Selector
+#### 选择器
 
-Selector is a handy mechanism to identify a specific UI object in the current window.
+选择器是一种方便的**获取当前屏幕视野内某个UI对象**的机制。
 
 ```python
-# Select the object with text 'Clock' and its className is 'android.widget.TextView'
+# 选择 text 为'Clock'以及 className 为 'android.widget.TextView' 的UI对象
 d(text='Clock', className='android.widget.TextView')
 ```
 
-Selector supports below parameters. Refer to [UiSelector Java doc](http://developer.android.com/tools/help/uiautomator/UiSelector.html) for detailed information.
+选择器支持一下参数。详情请参考[UiSelector Java doc](http://developer.android.com/tools/help/uiautomator/UiSelector.html) 
 
 - `text`, `textContains`, `textMatches`, `textStartsWith`
 - `className`, `classNameMatches`
@@ -752,31 +753,30 @@ Selector supports below parameters. Refer to [UiSelector Java doc](http://develo
 - `resourceId`, `resourceIdMatches`
 - `index`, `instance`
 
-#### Children and siblings
+##### 子节点和兄弟节点
 
-- children
+- 子节点
 
   ```python
   # get the children or grandchildren
   d(className="android.widget.ListView").child(text="Bluetooth")
   ```
 
-- siblings
+- 兄弟节点
 
   ```python
   # get siblings
   d(text="Google").sibling(className="android.widget.ImageView")
   ```
 
-- children by text or description or instance
+- 根据 text 或 description  或 instance 获取子节点
 
   ```python
-  # get the child matching the condition className="android.widget.LinearLayout"
-  # and also its children or grandchildren with text "Bluetooth"
+  # 获取某个子节点，其 className 为"android.widget.LinearLayout"，且该节点的子节点的 text为 "Bluetooth"
   d(className="android.widget.ListView", resourceId="android:id/list") \
    .child_by_text("Bluetooth", className="android.widget.LinearLayout")
   
-  # get children by allowing scroll search
+  # 选择允许 scroll search 的子节点
   d(className="android.widget.ListView", resourceId="android:id/list") \
    .child_by_text(
       "Bluetooth",
@@ -1064,98 +1064,96 @@ Selector supports below parameters. Refer to [UiSelector Java doc](http://develo
   d(scrollable=True).scroll.to(text="Security")
   ```
 
-### Watcher
+#### Watcher
 
-You can register [watchers](http://developer.android.com/tools/help/uiautomator/UiWatcher.html) to perform some actions when a selector does not find a match.
+你可以注册一个 [watchers](http://developer.android.com/tools/help/uiautomator/UiWatcher.html) 
 
-- Register Watcher
+- 注册Watcher
 
-  When a selector can not find a match, uiautomator2 will run all registered watchers.
+  当选择器没有找到匹配的元素时，uiautomator2会执行所有注册的watcher
 
-  - Click target when conditions match
+  - 当条件匹配时，点击目标对象
 
   ```python
   d.watcher("AUTO_FC_WHEN_ANR").when(text="ANR").when(text="Wait") \
                                .click(text="Force Close")
-  # d.watcher(name) ## creates a new named watcher.
-  #  .when(condition)  ## the UiSelector condition of the watcher.
-  #  .click(target)  ## perform click action on the target UiSelector.
+  # d.watcher(name) ## 创建一个watcher，名为name.
+  #  .when(condition)  ## 选择器的匹配条件，也是watcher监听的条件.
+  #  .click(target)  ## 点击目标对象.
   ```
 
-  There is also a trick about click. You can use click without arguments.
+  你可以使用不带参数调用`click`
 
   ```python
   d.watcher("ALERT").when(text="OK").click()
-  # Same as
+  # 相当于 
   d.watcher("ALERT").when(text="OK").click(text="OK")
   ```
 
-  - Press key when a condition becomes true
+  - 当条件符合时按下某个键
 
   ```python
   d.watcher("AUTO_FC_WHEN_ANR").when(text="ANR").when(text="Wait") \
                                .press("back", "home")
-  # d.watcher(name) ## creates a new named watcher.
-  #  .when(condition)  ## the UiSelector condition of the watcher.
-  #  .press(<keyname>, ..., <keyname>.()  ## press keys one by one in sequence.
+  # d.watcher(name) ## 创建一个watcher，名为name
+  #  .when(condition)  ## 选择器的匹配条件，也是watcher监听的条件.
+  #  .press(<keyname>, ..., <keyname>.()  ## 按顺序一个个点击
   ```
 
-- Check if the named watcher triggered
+- 检查某个watcher是否被触发
 
-  A watcher is triggered, which means the watcher was run and all its conditions matched.
+  一个watcher被触发，意味着所有条件都符合，且watcher已经运行了
 
   ```python
   d.watcher("watcher_name").triggered
   # true in case of the specified watcher triggered, else false
   ```
 
-- Remove a named watcher
+- 根据名字清除watcher
 
   ```python
   # remove the watcher
   d.watcher("watcher_name").remove()
   ```
 
-- List all watchers
+- l写出所有 watchers
 
   ```python
   d.watchers
   # a list of all registered watchers
   ```
 
-- Check for any triggered watcher
+- 检查有没有watcher被触发了
 
   ```python
   d.watchers.triggered
-  #  true in case of any watcher triggered
+  # 有任何watcher被触发都会返回 true 
   ```
 
-- Reset all triggered watchers
+- 重置所有watchers
 
   ```python
-  # reset all triggered watchers, after that, d.watchers.triggered will be false.
+  # 重置所有watchers，这以后 d.watchers.triggered 的值变为 false.
   d.watchers.reset()
   ```
 
-- Remove watchers
+- 清除watchers
 
   ```python
-  # remove all registered watchers
+  # 清除所有watchers
   d.watchers.remove()
-  # remove the named watcher, same as d.watcher("watcher_name").remove()
+  # 根据名字清除watcher, 相当于 d.watcher("watcher_name").remove()
   d.watchers.remove("watcher_name")
   ```
 
-- Force to run all watchers
+- 强制运行鄋watcher
 
   ```python
   # force to run all registered watchers
   d.watchers.run()
   ```
 
-- Run all watchers when page update.
-
-  通常可以用来自动点击权限确认框，或者自动安装
+- 当页面更新后运行所有watcher。通常可以用来自动点击权限确认框，或者自动安装
 
   ```python
   d.watcher("OK").when(text="OK").click(text="OK")
@@ -1171,7 +1169,7 @@ You can register [watchers](http://developer.android.com/tools/help/uiautomator/
 
 另外文档还是有很多没有写，推荐直接去看源码[__init__.py](uiautomator2/__init__.py)
 
-### Global settings
+#### 全局设置
 
 ```python
 # set delay 1.5s after each UI click and click
@@ -1201,9 +1199,9 @@ UiAutomator中的超时设置(隐藏方法)
 
 为了防止客户端程序响应超时，`waitForIdleTimeout`和`waitForSelectorTimeout`目前已改为`0`
 
-Refs: [Google uiautomator Configurator](https://developer.android.com/reference/android/support/test/uiautomator/Configurator)
+参考：[Google uiautomator Configurator](https://developer.android.com/reference/android/support/test/uiautomator/Configurator)
 
-### Input method
+#### Input 方法
 
 这种方法通常用于不知道控件的情况下的输入。第一步需要切换输入法，然后发送adb广播命令，具体使用方法如下
 
@@ -1225,16 +1223,16 @@ _什么时候该使用这个函数呢？_
 这个时候就需要`send_action`函数了，这里用到了只有输入法才能用的[IME_ACTION_CODE](https://developer.android.com/reference/android/view/inputmethod/EditorInfo)。
 `send_action`先broadcast命令发送给输入法操作`IME_ACTION_CODE`，由输入法完成后续跟EditText的通信。（原理我不太清楚，有了解的，提issue告诉我)
 
-### Toast
+#### Toast
 
-Show Toast
+显示信息框
 
 ```python
 d.toast.show("Hello world")
 d.toast.show("Hello world", 1.0) # show for 1.0s, default 1.0s
 ```
 
-Get Toast
+获取信息框
 
 ```python
 # [Args]
@@ -1253,7 +1251,7 @@ d.toast.reset()
 
 ### XPath
 
-For example: 其中一个节点的内容
+比如其中一个节点的内容
 
 ```xml
 <android.widget.TextView
@@ -1332,7 +1330,7 @@ for elem in d.xpath("//android.widget.TextView").all():
 
 ## [CHANGELOG (generated by pbr)](CHANGELOG)
 
-See changelog from git history
+从git历史中查看变更记录
 
 ```
 git log --graph --date-order -C -M --pretty=format:"<%h> %ad [%an] %Cgreen%d%Creset %s" --all --date=short
