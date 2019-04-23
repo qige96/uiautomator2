@@ -362,26 +362,24 @@ d.disable_popups(False) # 不自动跳过弹窗
 
 #### Shell 命令
 
-- Run a short-lived shell command with a timeout protection. (Default timeout 60s)
+- 运行一个短期命令 (默认 60s 超时)
 
-  Note: timeout support require `atx-agent >=0.3.3`
+  > **注意：**超时功能需要 `atx-agent >=0.3.3` ；另外`adb_shell`方法已被抛弃，请使用 `shell`方法 。
 
-  `adb_shell` function is deprecated. Use `shell` instead.
-
-  Simple usage
+  简单用法：
 
   ```python
   output, exit_code = d.shell("pwd", timeout=60) # timeout 60s (Default)
   # output: "/\n", exit_code: 0
-  # Similar to command: adb shell pwd
+  # 相当于使用命令行输入: adb shell pwd
   
-  # Since `shell` function return type is `namedtuple("ShellResponse", ("output", "exit_code"))`
-  # so we can do some tricks
+  # 因为 `shell` 的返回值是一个`namedtuple("ShellResponse", ("output", "exit_code"))`
+  # 所以我们可以：
   output = d.shell("pwd").output
   exit_code = d.shell("pwd").exit_code
   ```
 
-  The first argument can be list. for example
+  第一个参数可以是一个列表，比如：
 
   ```python
   output, exit_code = d.shell(["ls", "-l"])
@@ -389,11 +387,12 @@ d.disable_popups(False) # 不自动跳过弹窗
   ```
 
   This returns a string for stdout merged with stderr.
-  If the command is a blocking command, `shell` will also block until the command is completed or the timeout kicks in. No partial output will be received during the execution of the command. This API is not suitable for long-running commands. The shell command given runs in a similar environment of `adb shell`, which has a Linux permission level of `adb` or `shell` (higher than an app permission).
 
-- Run a long-running shell command
+  如果这个命令是一个阻塞式命令，那么`shell`方法也会阻塞，直到命令执行结束或者超时。命令执行期间不会有任何哪怕是部分的输出。这个额API不适合长期的命令。该方法的命令在一个类似`abd shell`的环境中执行，因此命令的执行权限与 `adb`相同（比App的权限要高）。
 
-  add stream=True will return `requests.models.Response` object. More info see [requests stream](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html#id5)
+- 运行一个长期命令
+
+  添加`stream=True` 会返回一个 `requests.models.Response` 对象. 详情请参考 [requests stream](http://docs.python-requests.org/zh_CN/latest/user/quickstart.html#id5)
 
   ```python
   r = d.shell("logcat", stream=True)
@@ -405,62 +404,62 @@ d.disable_popups(False) # 不自动跳过弹窗
               break
           print("Read:", line.decode('utf-8'))
   finally:
-      r.close() # this method must be called
+      r.close() # 必须调用该方法
   ```
 
-  Command will be terminated when `r.close()` called.
+  在 `r.close()` 被调用时命令停止执行。
 
-### Session
+#### 会话
 
-Session represent an app lifecycle. Can be used to start app, detect app crash.
+一个**会话**代表一个App的使用周期，可以用来启动App，以及检测App的崩溃。
 
-- Launch and close app
+- 启动与关闭App。
 
   ```python
-  sess = d.session("com.netease.cloudmusic") # start 网易云音乐
+  sess = d.session("com.netease.cloudmusic") # 启动网易云音乐
   sess.close() # 停止网易云音乐
   ```
 
-- Use python `with` to launch and close app
+- 使用python `with` 启动与关闭App。
 
   ```python
   with d.session("com.netease.cloudmusic") as sess:
       sess(text="Play").click()
   ```
 
-- Attach to the running app
+- 与正在运行的App绑定。
 
   ```python
   sess = d.session("com.netease.cloudmusic", attach=True)
   ```
 
-- Detect app crash
+- 检测App崩溃。
 
   ```python
-  # When app is still running
-  sess(text="Music").click() # operation goes normal
+  # 当App正常运行时
+  sess(text="Music").click() # 操作执行正常
   
-  # If app crash or quit
-  sess(text="Music").click() # raise SessionBrokenError
-  # other function calls under session will raise SessionBrokenError too
+  # 当App崩溃时
+  sess(text="Music").click() # 报错 SessionBrokenError
+  # 其他在会话中执行的操作也会报错 raise SessionBrokenError too
   
   ```
 
   ```python
-  # check if session is ok.
-  # Warning: function name may change in the future
+  # 检查会话是否在进行中
+  # 注意: 该方法名以后或许会变
   sess.running() # True or False
   ```
 
-### Retrieve the device info
+#### 获取设备信息
 
-Get basic information
+获取基本信息
 
 ```python
 d.info
 ```
 
-Below is a possible output:
+可能的输出：
 
 ```
 { 
@@ -476,12 +475,12 @@ Below is a possible output:
 }
 ```
 
-Get window size
+获取屏幕大小
 
 ```python
 print(d.window_size())
-# device upright output example: (1080, 1920)
-# device horizontal output example: (1920, 1080)
+# 竖放设备时的可能输出: (1080, 1920)
+# 横放设备时的可能输出: (1920, 1080)
 ```
 
 Get current app info. For some android devices, the output could be empty (see *Output example 3*)
