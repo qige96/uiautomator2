@@ -1,3 +1,7 @@
+
+
+
+
 # UIautomator2 
 
 
@@ -119,7 +123,7 @@ uiautomator2 是一个Android UI自动化框架，支持Python编写测试脚本
    python -m uiautomator2 init
    ```
 
-   >  有时候init也会出错，请参考[手动Init指南](https://github.com/openatx/uiautomator2/wiki/Manual-Init)
+   > 有时候init也会出错，请参考[手动Init指南](https://github.com/openatx/uiautomator2/wiki/Manual-Init)
 
    安装提示`success`代表已安装完成。
 
@@ -163,7 +167,7 @@ d = u2.connect('10.0.0.1') # 也可以用 u2.connect_wifi('10.0.0.1')
 print(d.info)
 ```
 
-2. **通过USB线连接**
+1. **通过USB线连接**
    假设设备的序列号是 `123456f` (可以通过 `adb devices` 查看序列号)
 
 ```python
@@ -179,7 +183,7 @@ print(d.info)
 
 ## 命令行工具
 
->  以下命令中的的`$device_ip`代表设备的ip地址
+> 以下命令中的的`$device_ip`代表设备的ip地址
 
 - `init`: 为设备安装所需要的程序
 
@@ -336,7 +340,7 @@ d.healthcheck()
 
 #### ~~Auto click permission dialogs~~
 
->  **注意** `disable_popups`函数，检测发现很不稳定，暂时不要使用，等候通知。
+> **注意** `disable_popups`函数，检测发现很不稳定，暂时不要使用，等候通知。
 
 在 0.1.1 版引入
 
@@ -473,6 +477,7 @@ d.info
     u'displayHeight': 1184,
     u'naturalOrientation': True
 }
+
 ```
 
 获取屏幕大小
@@ -547,6 +552,7 @@ print(d.device_info)
  'cpu': {'cores': 8, 'hardware': 'Qualcomm Technologies, Inc MSM8953Pro'},
  'presenceChangedAt': '0001-01-01T00:00:00Z',
  'usingBeganAt': '0001-01-01T00:00:00Z'}
+
 ```
 
 ### 关键事件（Key Events）
@@ -791,12 +797,12 @@ d(text='Clock', className='android.widget.TextView')
     within its sub hierarchy that is at the instance specified. It is performed
     on visible views **without scrolling**.
 
-  See below links for detailed information:
+  详细信息请参考下面链接：
 
   - [UiScrollable](http://developer.android.com/tools/help/uiautomator/UiScrollable.html), `getChildByDescription`, `getChildByText`, `getChildByInstance`
   - [UiCollection](http://developer.android.com/tools/help/uiautomator/UiCollection.html), `getChildByDescription`, `getChildByText`, `getChildByInstance`
 
-  Above methods support chained invoking, e.g. for below hierarchy
+  上述方法支持链式调用，例如下面的层次布局：
 
   ```xml
   <node index="0" text="" resource-id="android:id/list" class="android.widget.ListView" ...>
@@ -813,7 +819,7 @@ d(text='Clock', className='android.widget.TextView')
 
   ![settings](https://raw.github.com/xiaocong/uiautomator/master/docs/img/settings.png)
 
-  To click the switch widget right to the TextView 'Wi‑Fi', we need to select the switch widgets first. However, according to the UI hierarchy, more than one switch widgets exist and have almost the same properties. Selecting by className will not work. Alternatively, the below selecting strategy would help:
+  若要切换“Wi-Fi”，我们需要先选中“Wi-Fi”的切换开关。然而，该UI的层次结构中存在着多于一个的切换开关，且拥有几乎一样的属性值。我们无法根据className去选择，所以我们需要下面的选择策略：
 
   ```python
   d(className="android.widget.ListView", resourceId="android:id/list") \
@@ -822,32 +828,31 @@ d(text='Clock', className='android.widget.TextView')
     .click()
   ```
 
-- relative positioning
+- 相对位置
 
-  Also we can use the relative positioning methods to get the view: `left`, `right`, `top`, `bottom`.
+  我们也可以使用相对位置方法来获取组件：`left`, `right`, `top`, `bottom`
 
-  - `d(A).left(B)`, selects B on the left side of A.
-  - `d(A).right(B)`, selects B on the right side of A.
-  - `d(A).up(B)`, selects B above A.
-  - `d(A).down(B)`, selects B under A.
+  - `d(A).left(B)`, 选择在A左边的B
+  - `d(A).right(B)`, 选择在A右边的B
+  - `d(A).up(B)`, 选择在A上面的B
+  - `d(A).down(B)`, 选择在A下面的B
 
-  So for above cases, we can alternatively select it with:
+  因此对于上面的例子，我们可以使用一下方式来选择：
 
   ```python
-  ## select "switch" on the right side of "Wi‑Fi"
+  ## 选择 "Wi‑Fi" 右边的 "switch" 
   d(text="Wi‑Fi").right(className="android.widget.Switch").click()
   ```
 
-- Multiple instances
+- 多个实例
 
-  Sometimes the screen may contain multiple views with the same properties, e.g. text, then you will
-  have to use the "instance" property in the selector to pick one of qualifying instances, like below:
+  有时屏幕可能包含具有相同属性的多个视图，例如 文字，然后你会必须使用选择器中的“instance”属性来选择一个符合需求的实例，如下所示：
 
   ```python
-  d(text="Add new", instance=0)  # which means the first instance with text "Add new"
+  d(text="Add new", instance=0)  # 选中第一个text属性为“Add new”组件
   ```
 
-  In addition, uiautomator2 provides a list-like API (similar to jQuery):
+  此外，uiautomator2提供一个类似列表的API（类似JQuery）：
 
   ```python
   # get the count of views with text "Add new" on current screen
@@ -913,6 +918,7 @@ d(text='Clock', className='android.widget.TextView')
                       u'left': 200},
   u'checkable': False
   }
+  
   ```
 
 - Get/Set/Clear text of an editable field (e.g., EditText widgets)
@@ -1272,6 +1278,7 @@ xpath定位和使用方法
 ```
 description -> content-desc
 resourceId -> resource-id
+
 ```
 
 常见用法
@@ -1314,6 +1321,7 @@ for elem in d.xpath("//android.widget.TextView").all():
 
 # className包含ImageView
 //*[contains(name(), "ImageView")]
+
 ```
 
 # 项目历史
@@ -1334,6 +1342,7 @@ for elem in d.xpath("//android.widget.TextView").all():
 
 ```
 git log --graph --date-order -C -M --pretty=format:"<%h> %ad [%an] %Cgreen%d%Creset %s" --all --date=short
+
 ```
 
 ## 依赖项目
